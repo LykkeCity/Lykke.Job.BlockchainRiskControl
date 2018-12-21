@@ -1,0 +1,18 @@
+BlockchainRiskControlJob:
+  Db:
+    LogsConnString:
+      settings-key: BlockchainRiskControlJob-LogsConnString
+      types:
+        - AzureTableStorage
+SlackNotifications:
+    AzureQueue:
+        ConnectionString:
+            settings-key: SlackNotificationsConnString
+            types:
+                - AzureTableStorage
+        QueueName:
+            settings-key: SlackQueueName
+MonitoringServiceClient:
+    MonitoringServiceUrl:
+        settings-key: MonitoringServiceUrl
+
