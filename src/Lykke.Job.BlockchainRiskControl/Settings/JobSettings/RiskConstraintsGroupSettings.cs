@@ -4,15 +4,18 @@ using JetBrains.Annotations;
 namespace Lykke.Job.BlockchainRiskControl.Settings.JobSettings
 {
     [UsedImplicitly]
-    public class BlockchainRiskControlJobSettings
+    public class RiskConstraintsGroupSettings
     {
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public DbSettings Db { get; set; }
-        
-        [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public CqrsSettings Cqrs { get; set; }
+        public string Blockchain { get; set; }
 
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public IList<RiskConstraintsGroupSettings> ConstraintsGroups { get; set; }
+        public string Asset { get; set; }
+
+        [UsedImplicitly(ImplicitUseKindFlags.Assign)]
+        public Domain.OperationType Operation { get; set; }
+
+        [UsedImplicitly(ImplicitUseKindFlags.Assign)]
+        public IList<RiskConstraintSettings> Constraints { get; }
     }
 }

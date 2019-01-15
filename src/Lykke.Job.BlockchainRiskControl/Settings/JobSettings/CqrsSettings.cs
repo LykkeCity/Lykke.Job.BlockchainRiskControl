@@ -1,18 +1,20 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using JetBrains.Annotations;
+using Lykke.SettingsReader.Attributes;
 
 namespace Lykke.Job.BlockchainRiskControl.Settings.JobSettings
 {
     [UsedImplicitly]
-    public class BlockchainRiskControlJobSettings
+    public class CqrsSettings
     {
+        [AmqpCheck]
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public DbSettings Db { get; set; }
-        
-        [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public CqrsSettings Cqrs { get; set; }
+        public string RabbitConnectionString { get; set; }
 
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public IList<RiskConstraintsGroupSettings> ConstraintsGroups { get; set; }
+        public TimeSpan RetryDelay { get; set; }
+
+        [UsedImplicitly(ImplicitUseKindFlags.Assign)]
+        public TimeSpan WaitForOperationResolutionRetryDelay { get; set; }
     }
 }

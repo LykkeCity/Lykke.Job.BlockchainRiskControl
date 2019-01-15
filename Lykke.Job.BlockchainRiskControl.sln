@@ -31,7 +31,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5. Hosts", "5. Hosts", "{EE
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Job.BlockchainRiskControl", "src\Lykke.Job.BlockchainRiskControl\Lykke.Job.BlockchainRiskControl.csproj", "{5566FD3E-0DB6-4BF3-A98D-4A1181B3E02C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Job.LykkeService.Contract", "contract\Lykke.Job.BlockchainRiskControl.Contract\Lykke.Job.LykkeService.Contract.csproj", "{A92177FD-4199-4085-95B6-4CE2932DA82A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lykke.Job.BlockchainRiskControl.Contract", "contract\Lykke.Job.BlockchainRiskControl.Contract\Lykke.Job.BlockchainRiskControl.Contract.csproj", "{A92177FD-4199-4085-95B6-4CE2932DA82A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
