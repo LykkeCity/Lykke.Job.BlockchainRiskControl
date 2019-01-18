@@ -36,6 +36,8 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
 
             builder.RegisterType<RiskConstrainsInitializer>()
                 .AsSelf();
+
+            // TODO: register services and repositories
         }
     }
 }

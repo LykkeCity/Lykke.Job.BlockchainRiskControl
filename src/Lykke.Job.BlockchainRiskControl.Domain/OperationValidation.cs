@@ -22,6 +22,7 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
             Operation operation,
             OperationRisk risk,
             DateTime validationMoment,
+            DateTime? resolutionMoment,
             OperationValidationResolution? resolution)
         {
             Version = version;
@@ -31,17 +32,36 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
             Resolution = resolution;
         }
 
-        public static OperationValidation Create(Operation operation, OperationRisk risk)
+        public static OperationValidation Create(Operation operation, OperationRisk risk, DateTime? validationMoment = null)
         {
             return new OperationValidation
             (
                 version: null,
                 operation: operation,
                 risk: risk,
-                validationMoment: DateTime.UtcNow,
+                validationMoment: validationMoment ?? DateTime.UtcNow,
+                resolutionMoment: null,
                 resolution: risk.IsResolutionRequired 
                     ? (OperationValidationResolution?)OperationValidationResolution.Unconfirmed
                     : null
+            );
+        }
+
+        public static OperationValidation CreateResolved(
+            Operation operation, 
+            OperationRisk risk, 
+            DateTime validationMoment, 
+            DateTime resolutionMoment, 
+            OperationValidationResolution resolution)
+        {
+            return new OperationValidation
+            (
+                version: null,
+                operation: operation,
+                risk: risk,
+                validationMoment: validationMoment,
+                resolutionMoment: resolutionMoment,
+                resolution: resolution
             );
         }
 
