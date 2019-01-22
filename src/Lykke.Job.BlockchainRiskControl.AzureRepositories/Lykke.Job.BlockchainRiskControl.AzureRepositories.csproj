@@ -5,6 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Lykke.AzureStorage" Version="8.13.4" />
+    <PackageReference Include="MongoDB.Driver" Version="2.7.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Lykke.Job.BlockchainRiskControl.Domain\Lykke.Job.BlockchainRiskControl.Domain.csproj" />

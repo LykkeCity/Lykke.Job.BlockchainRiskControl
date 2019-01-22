@@ -46,7 +46,7 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Unit
 
             statisticsRepositoryMock
                 .Setup(x => x.GetOperationsCountForTheLastPeriodAsync(It.IsAny<TimeSpan>()))
-                .ReturnsAsync<TimeSpan, IStatisticsRepository, int>(period => 5);
+                .ReturnsAsync<TimeSpan, IStatisticsRepository, long>(period => 5);
 
             var services = new ServiceCollection();
 

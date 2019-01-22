@@ -9,5 +9,11 @@ namespace Lykke.Job.BlockchainRiskControl.Settings.JobSettings
         [AzureTableCheck]
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
         public string LogsConnString { get; set; }
+
+        [AzureTableCheck]
+        public string AzureDataConnString { get; set; }
+
+        [MongoCheck]
+        public string MongoDataConnString { get; set; }
     }
 }

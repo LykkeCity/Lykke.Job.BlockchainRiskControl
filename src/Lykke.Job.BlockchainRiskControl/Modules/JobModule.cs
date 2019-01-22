@@ -1,5 +1,10 @@
 ﻿using Autofac;
 using JetBrains.Annotations;
+using Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics;
+using Lykke.Job.BlockchainRiskControl.AzureRepositories.Validation;
+using Lykke.Job.BlockchainRiskControl.Domain.Repositories;
+using Lykke.Job.BlockchainRiskControl.Domain.Services;
+using Lykke.Job.BlockchainRiskControl.DomainServices;
 using Lykke.Job.BlockchainRiskControl.Services;
 using Lykke.Job.BlockchainRiskControl.Settings;
 using Lykke.Job.BlockchainRiskControl.Settings.JobSettings;
@@ -12,11 +17,11 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
     [UsedImplicitly]
     public class JobModule : Module
     {
-        private readonly BlockchainRiskControlJobSettings _settings;
+        private readonly IReloadingManager<BlockchainRiskControlJobSettings> _settings;
 
         public JobModule(IReloadingManager<AppSettings> settings)
         {
-            _settings = settings.CurrentValue.BlockchainRiskControlJob;
+            _settings = settings.Nested(x => x.BlockchainRiskControlJob);
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -27,7 +32,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
 
             builder.RegisterType<StartupManager>()
                 .As<IStartupManager>()
-                .WithParameter(TypedParameter.From(_settings.ConstraintsGroups))
+                .WithParameter(TypedParameter.From(_settings.CurrentValue.ConstraintsGroups))
                 .SingleInstance();
 
             builder.RegisterType<ShutdownManager>()
@@ -37,7 +42,40 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
             builder.RegisterType<RiskConstrainsInitializer>()
                 .AsSelf();
 
-            // TODO: register services and repositories
+            builder.RegisterType<OperationValidationRepository>()
+                .As<IOperationValidationRepository>()
+                .WithParameter(TypedParameter.From(_settings.ConnectionString(x => x.Db.AzureDataConnString)))
+                .SingleInstance();
+
+            builder.RegisterType<StatisticsRepository>()
+                .As<IStatisticsRepository>()
+                .AsSelf()
+                .WithParameter(TypedParameter.From(_settings.CurrentValue.Db.MongoDataConnString))
+                .SingleInstance();
+
+            builder.RegisterType<OperationValidationService>()
+                .As<IOperationValidationService>()
+                .SingleInstance();
+
+            builder.RegisterType<StatisticsService>()
+                .As<IStatisticsService>()
+                .SingleInstance();
+
+            builder.RegisterType<OperationRiskEstimator>()
+                .As<IOperationRiskEstimator>()
+                .SingleInstance();
+
+            builder.RegisterType<RiskConstraintsRegistry>()
+                .As<IRiskConstraintsRegistry>()
+                .SingleInstance();
+
+            builder.RegisterType<RiskConstraintsRegistryConfigurator>()
+                .As<IRiskConstraintsRegistryConfigurator>()
+                .SingleInstance();
+
+            builder.RegisterType<RiskConstraintsFactory>()
+                .As<IRiskConstraintsFactory>()
+                .SingleInstance();
         }
     }
 }
