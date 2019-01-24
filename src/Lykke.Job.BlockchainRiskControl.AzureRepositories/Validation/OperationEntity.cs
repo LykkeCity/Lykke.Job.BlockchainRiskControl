@@ -1,10 +1,9 @@
-﻿using System;
+using System;
 using Lykke.Job.BlockchainRiskControl.Domain;
-using MongoDB.Bson.Serialization.Attributes;
 
-namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
+namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Validation
 {
-    internal class StatisticsEntity
+    internal class OperationEntity
     {
         public Guid Id { get; set; }
         public OperationType Type { get; set; }
@@ -14,14 +13,13 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
         public string FromAddress { get; set; }
         public string ToAddress { get; set; }
         public decimal Amount { get; set; }
-        public DateTime Timestamp { get; set; }
 
-        public StatisticsEntity()
+        public OperationEntity()
         {
             // default ctor for deserialization
         }
-        
-        public StatisticsEntity(Operation operation)
+
+        public OperationEntity(Operation operation)
         {
             Id = operation.Id;
             Type = operation.Type;
@@ -31,7 +29,11 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
             FromAddress = operation.FromAddress;
             ToAddress = operation.ToAddress;
             Amount = operation.Amount;
-            Timestamp = DateTime.UtcNow;
+        }
+
+        public Operation ToOperation()
+        {
+            return new Operation(Id, Type, UserId, BlockchainType, BlockchainAssetId, FromAddress, ToAddress, Amount);
         }
     }
 }

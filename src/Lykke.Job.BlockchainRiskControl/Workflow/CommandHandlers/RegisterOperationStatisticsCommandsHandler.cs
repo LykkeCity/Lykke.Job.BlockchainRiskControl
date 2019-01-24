@@ -20,7 +20,7 @@ namespace Lykke.Job.BlockchainRiskControl.Workflow.CommandHandlers
         public async Task<CommandHandlingResult> Handle(RegisterOperationStatisticsCommand command, IEventPublisher publisher)
         {
             await _statisticsService.RegisterStatisticsAsync(command.OperationId);
-            
+
             return CommandHandlingResult.Ok();
         }
     }

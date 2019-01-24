@@ -10,7 +10,7 @@
 
         public bool IsReliable => Level == OperationRiskLevel.Reliable;
         public bool IsResolutionRequired => Level == OperationRiskLevel.ResolutionRequired;
-        
+
         private OperationRisk(string violations, OperationRiskLevel level)
         {
             Violations = violations;

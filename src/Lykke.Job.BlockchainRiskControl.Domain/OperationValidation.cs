@@ -15,7 +15,7 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
         public bool IsResolved => Risk.IsResolutionRequired &&
                                   Resolution != OperationValidationResolution.Unconfirmed &&
                                   // We need this condition while Resolution value is updated via the storage
-                                  ResolutionMoment.HasValue; 
+                                  ResolutionMoment.HasValue;
 
         private OperationValidation(
             string version,
@@ -41,17 +41,17 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
                 risk: risk,
                 validationMoment: validationMoment ?? DateTime.UtcNow,
                 resolutionMoment: null,
-                resolution: risk.IsResolutionRequired 
+                resolution: risk.IsResolutionRequired
                     ? (OperationValidationResolution?)OperationValidationResolution.Unconfirmed
                     : null
             );
         }
 
         public static OperationValidation CreateResolved(
-            Operation operation, 
-            OperationRisk risk, 
-            DateTime validationMoment, 
-            DateTime resolutionMoment, 
+            Operation operation,
+            OperationRisk risk,
+            DateTime validationMoment,
+            DateTime resolutionMoment,
             OperationValidationResolution resolution)
         {
             return new OperationValidation
@@ -78,7 +78,7 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
                 {
                     throw new InvalidOperationException($"Validation already was resolved as {Resolution} and can't be changed to {resolution}");
                 }
-            } 
+            }
             else
             {
                 Resolution = resolution;

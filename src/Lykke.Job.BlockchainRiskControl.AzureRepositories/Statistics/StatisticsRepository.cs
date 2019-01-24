@@ -17,24 +17,28 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
         private readonly IMongoDatabase _db;
         private readonly ILog _log;
 
+        private IMongoCollection<StatisticsEntity> Statistics => _db.GetCollection<StatisticsEntity>("Statistics");
+
         public StatisticsRepository(string connectionString, ILogFactory logFactory)
         {
             var url = new MongoUrl(connectionString);
-            
-            _db = new MongoClient(url).GetDatabase(url.DatabaseName, 
-                new MongoDatabaseSettings { GuidRepresentation = GuidRepresentation.Standard });
-                
+
+            _db = new MongoClient(url).GetDatabase(
+                url.DatabaseName ?? "BlockchainRiskControl",
+                new MongoDatabaseSettings
+                {
+                    GuidRepresentation = GuidRepresentation.Standard
+                });
+
             _log = logFactory.CreateLog(this);
         }
-
-        public IMongoCollection<StatisticsEntity> Statistics => _db.GetCollection<StatisticsEntity>("Statistics");
 
         public async Task CheckIndexesAsync()
         {
             var indexed = (await Statistics.Indexes.List().ToListAsync())
                 .SelectMany(doc => doc["key"].AsBsonDocument.Names)
                 .ToHashSet();
-            
+
             var toIndex = new HashSet<string>()
             {
                 nameof(StatisticsEntity.Timestamp),
@@ -79,9 +83,9 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
         {
             await Statistics.ReplaceOneAsync(
                 e => e.Id == operation.Id,
-                new StatisticsEntity(operation), 
-                new UpdateOptions 
-                { 
+                new StatisticsEntity(operation),
+                new UpdateOptions
+                {
                     IsUpsert = true,
                 });
         }

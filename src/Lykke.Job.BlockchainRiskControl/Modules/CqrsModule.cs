@@ -71,7 +71,8 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
         {
             return new RabbitMqConventionEndpointResolver(
                 "RabbitMq",
-                SerializationFormat.MessagePack,
+                //SerializationFormat.MessagePack,
+                SerializationFormat.Json,
                 environment: "lykke");
         }
 
@@ -100,7 +101,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
 
             const string defaultPipeline = "commands";
             const string defaultRoute = "self";
-            const string eventsRoute = "evets";
+            const string eventsRoute = "events";
 
             var registration = new List<IRegistration>
             {

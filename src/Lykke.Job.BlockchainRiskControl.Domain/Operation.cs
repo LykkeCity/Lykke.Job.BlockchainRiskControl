@@ -14,13 +14,13 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
         public decimal Amount { get; }
 
         public Operation(
-            Guid id, 
+            Guid id,
             OperationType type,
-            Guid userId, 
+            Guid userId,
             string blockchainType,
             string blockchainAssetId,
-            string fromAddress, 
-            string toAddress, 
+            string fromAddress,
+            string toAddress,
             decimal amount)
         {
             Id = id;
