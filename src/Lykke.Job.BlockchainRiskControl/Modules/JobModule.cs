@@ -40,7 +40,8 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
                 .SingleInstance();
 
             builder.RegisterType<RiskConstrainsInitializer>()
-                .AsSelf();
+                .AsSelf()
+                .WithParameter(TypedParameter.From(_settings.CurrentValue.ConstraintsGroups));
 
             builder.RegisterType<OperationValidationRepository>()
                 .As<IOperationValidationRepository>()

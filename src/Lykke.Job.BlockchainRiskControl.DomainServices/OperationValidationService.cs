@@ -55,7 +55,7 @@ namespace Lykke.Job.BlockchainRiskControl.DomainServices
             // validation with value which is already exist in the storage to let
             // the resolve logic work. In the future resolving will be done from the BO
             // and the value of the resolution will be passed by the command.
-            
+
             // ReSharper disable PossibleInvalidOperationException
             validation.Resolve(validation.Resolution.Value);
 

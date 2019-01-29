@@ -56,7 +56,7 @@ namespace Lykke.Job.BlockchainRiskControl.Workflow.CommandHandlers
                 default:
                     throw new ArgumentOutOfRangeException(nameof(resolution), resolution, null);
             }
-            
+
             return CommandHandlingResult.Ok();
         }
     }

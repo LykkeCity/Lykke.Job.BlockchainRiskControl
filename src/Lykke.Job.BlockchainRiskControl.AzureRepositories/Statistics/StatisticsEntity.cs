@@ -1,5 +1,6 @@
 ﻿using System;
 using Lykke.Job.BlockchainRiskControl.Domain;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
@@ -13,6 +14,7 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
         public string BlockchainAssetId { get; set; }
         public string FromAddress { get; set; }
         public string ToAddress { get; set; }
+        [BsonRepresentation(BsonType.Decimal128)]
         public decimal Amount { get; set; }
         public DateTime Timestamp { get; set; }
 

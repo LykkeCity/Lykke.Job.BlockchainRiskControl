@@ -27,7 +27,7 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
                 url.DatabaseName ?? "BlockchainRiskControl",
                 new MongoDatabaseSettings
                 {
-                    GuidRepresentation = GuidRepresentation.Standard
+                    GuidRepresentation = GuidRepresentation.Standard,
                 });
 
             _log = logFactory.CreateLog(this);
@@ -55,18 +55,22 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
 
         public async Task<decimal> GetAggregatedAmountForTheLastPeriodAsync(TimeSpan period)
         {
-            return await Statistics.Aggregate()
+            var result = await Statistics.Aggregate()
                 .Match(e => e.Timestamp >= DateTime.UtcNow.Subtract(period))
-                .Group(e => 1, g => g.Sum(e => e.Amount))
+                .Group(e => 1, g => new { Amount = g.Sum(e => e.Amount) })
                 .SingleAsync();
+
+            return result.Amount;
         }
 
         public async Task<decimal> GetAggregatedAmountForTheLastPeriodAsync(TimeSpan period, Guid userId)
         {
-            return await Statistics.Aggregate()
+            var result = await Statistics.Aggregate()
                 .Match(e => e.Timestamp >= DateTime.UtcNow.Subtract(period) && e.UserId == userId)
-                .Group(e => 1, g => g.Sum(e => e.Amount))
+                .Group(e => 1, g => new { Amount = g.Sum(e => e.Amount) })
                 .SingleAsync();
+
+            return result.Amount;
         }
 
         public async Task<long> GetOperationsCountForTheLastPeriodAsync(TimeSpan period)

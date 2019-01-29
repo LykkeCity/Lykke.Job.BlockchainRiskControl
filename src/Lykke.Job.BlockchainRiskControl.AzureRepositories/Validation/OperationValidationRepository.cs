@@ -15,14 +15,14 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Validation
 
         public OperationValidationRepository(IReloadingManager<string> connectionStringManager, ILogFactory logFactory)
         {
-            _storage = AzureTableStorage<OperationValidationEntity>.Create(connectionStringManager, "OperationValidations", logFactory);
+            _storage = AzureTableStorage<OperationValidationEntity>.Create(connectionStringManager, "RiskControlOperationValidations", logFactory);
         }
 
         public async Task AddAsync(OperationValidation validation) =>
             await _storage.CreateIfNotExistsAsync(new OperationValidationEntity(validation));
 
         public async Task SaveAsync(OperationValidation validation) =>
-            await _storage.ReplaceAsync(new OperationValidationEntity(validation));
+            await _storage.InsertOrReplaceAsync(new OperationValidationEntity(validation));
 
         public async Task<OperationValidation> TryGetAsync(Guid operationId)
         {

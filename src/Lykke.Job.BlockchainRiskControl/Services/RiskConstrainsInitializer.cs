@@ -14,7 +14,7 @@ namespace Lykke.Job.BlockchainRiskControl.Services
 
         private readonly IRiskConstraintsRegistryConfigurator _riskConstraintsRegistryConfigurator;
         private readonly IList<RiskConstraintsGroupSettings> _riskConstraintsGroupsSettings;
-        
+
         public RiskConstrainsInitializer(
             ILogFactory logFactory,
             IRiskConstraintsRegistryConfigurator riskConstraintsRegistryConfigurator,
@@ -38,7 +38,7 @@ namespace Lykke.Job.BlockchainRiskControl.Services
                     groupSettings.Blockchain,
                     groupSettings.Asset
                 });
-                
+
                 var groupConfiguration = new RiskConstraintsGroupConfiguration
                 (
                     operationType: groupSettings.Operation,

@@ -16,6 +16,6 @@ namespace Lykke.Job.BlockchainRiskControl.Settings.JobSettings
         public Domain.OperationType Operation { get; set; }
 
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
-        public IList<RiskConstraintSettings> Constraints { get; }
+        public IList<RiskConstraintSettings> Constraints { get; set; }
     }
 }
