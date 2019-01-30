@@ -1,9 +1,30 @@
 BlockchainRiskControlJob:
-  Db:
-    LogsConnString:
-      settings-key: BlockchainRiskControlJob-LogsConnString
-      types:
-        - AzureTableStorage
+    Db:
+        LogsConnString:
+            settings-key: BlockchainRiskControlJob-LogsConnString
+            types:
+                - AzureTableStorage
+        AzureDataConnString:
+            settings-key: BlockchainRiskControlJob-AzureDataConnString
+            types:
+                - AzureTableStorage
+        MongoDataConnString:
+            settings-key: BlockchainRiskControlJob-MongoDataConnString
+            types:
+                - MongoDB
+    Cqrs:
+        RabbitConnectionString:
+            settings-key: BlockchainRiskControlJob-RabbitConnectionString
+            types:
+                - RabbitMq
+        RetryDelay:
+            settings-key: BlockchainRiskControlJob-RetryDelay
+        WaitForOperationResolutionRetryDelay:
+            settings-key: BlockchainRiskControlJob-WaitForOperationResolutionRetryDelay
+    ConstraintsGroups:
+        settings-key: BlockchainRiskControlJob-ConstraintsGroups
+        types:
+            - JsonArray
 SlackNotifications:
     AzureQueue:
         ConnectionString:
