@@ -71,8 +71,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
         {
             return new RabbitMqConventionEndpointResolver(
                 "RabbitMq",
-                //SerializationFormat.MessagePack,
-                SerializationFormat.Json,
+                SerializationFormat.MessagePack,
                 environment: "lykke");
         }
 
