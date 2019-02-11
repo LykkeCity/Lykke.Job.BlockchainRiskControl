@@ -17,7 +17,7 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Integration
 {
     public class StatisticsRepositoryTests
     {
-        private const string SKIP = null;//"Should not be executed by TeamCity";
+        private const string SKIP = "Should not be executed by TeamCity";
         private readonly Guid _user1 = Guid.NewGuid();
         private readonly Guid _user2 = Guid.NewGuid();
         private readonly string _blockchain = "TEST";
