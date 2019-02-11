@@ -4,6 +4,10 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
 {
     public interface IRiskConstraint
     {
-        Task<RiskConstraintResolution> ApplyAsync(Operation operation);
+        Task<RiskConstraintResolution> ApplyAsync(
+            string blockchainType,
+            string blockchainAssetId,
+            OperationType? operationType,
+            Operation operation);
     }
 }

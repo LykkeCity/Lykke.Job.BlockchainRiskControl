@@ -35,9 +35,18 @@ namespace Lykke.Job.BlockchainRiskControl.Domain.RiskConstraints
             _maxAmount = maxAmount;
         }
 
-        public async Task<RiskConstraintResolution> ApplyAsync(Operation operation)
+        public async Task<RiskConstraintResolution> ApplyAsync(
+            string blockchainType,
+            string blockchainAssetId,
+            OperationType? operationType,
+            Operation operation)
         {
-            var aggregatedAmount = await _statisticsRepository.GetAggregatedAmountForTheLastPeriodAsync(_period, operation.UserId);
+            var aggregatedAmount = await _statisticsRepository.GetAggregatedAmountForTheLastPeriodAsync(
+                blockchainType,
+                blockchainAssetId,
+                operationType,
+                _period,
+                operation.UserId);
 
             return aggregatedAmount + operation.Amount > _maxAmount
                 ? RiskConstraintResolution.Violated($"Aggregated operations amount {aggregatedAmount} + {operation.Amount} > {_maxAmount} for the last {_period}")

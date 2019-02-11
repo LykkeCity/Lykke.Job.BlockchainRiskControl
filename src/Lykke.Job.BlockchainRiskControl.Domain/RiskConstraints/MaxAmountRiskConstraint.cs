@@ -21,10 +21,14 @@ namespace Lykke.Job.BlockchainRiskControl.Domain.RiskConstraints
             _maxAmount = maxAmount;
         }
 
-        public Task<RiskConstraintResolution> ApplyAsync(Operation operation)
+        public Task<RiskConstraintResolution> ApplyAsync(
+            string blockchainType,
+            string blockchainAssetId,
+            OperationType? operationType,
+            Operation operation)
         {
-            var resolution = operation.Amount > _maxAmount 
-                ? RiskConstraintResolution.Violated($"Operation amount {operation.Amount} > {_maxAmount}") 
+            var resolution = operation.Amount > _maxAmount
+                ? RiskConstraintResolution.Violated($"Operation amount {operation.Amount} > {_maxAmount}")
                 : RiskConstraintResolution.Passed;
 
             return Task.FromResult(resolution);

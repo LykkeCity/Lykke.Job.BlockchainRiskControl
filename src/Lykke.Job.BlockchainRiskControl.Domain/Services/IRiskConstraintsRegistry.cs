@@ -10,6 +10,7 @@ namespace Lykke.Job.BlockchainRiskControl.Domain.Services
         void Add(string blockchainType, string blockchainAssetId, IRiskConstraint constraint);
         void Add(string blockchainType, OperationType operationType, IRiskConstraint constraint);
         void Add(string blockchainType, string blockchainAssetId, OperationType operationType, IRiskConstraint constraint);
-        IEnumerable<IRiskConstraint> GetConstraints(string blockchainType, string blockchainAssetId, OperationType operationType);
+        IEnumerable<(string blockchainType, string blockchainAssetId, OperationType? operationType, IRiskConstraint constraint)> GetConstraints(
+            string blockchainType, string blockchainAssetId, OperationType operationType);
     }
 }

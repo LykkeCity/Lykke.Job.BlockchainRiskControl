@@ -19,13 +19,17 @@ namespace Lykke.Job.BlockchainRiskControl.DomainServices
             var constraints = _constraintsRegistry.GetConstraints(operation.BlockchainType, operation.BlockchainAssetId, operation.Type);
             var violationsBuilder = new StringBuilder();
 
-            foreach (var constraint in constraints)
+            foreach (var item in constraints)
             {
-                var validationResult = await constraint.ApplyAsync(operation);
+                var validationResult = await item.constraint.ApplyAsync(
+                    item.blockchainType,
+                    item.blockchainAssetId,
+                    item.operationType,
+                    operation);
 
                 if (validationResult.IsViolated)
                 {
-                    violationsBuilder.AppendLine($"{constraint.GetConstraintName()}: {validationResult.Violation}");
+                    violationsBuilder.AppendLine($"{item.constraint.GetConstraintName()}: {validationResult.Violation}");
                 }
             }
 

@@ -14,7 +14,7 @@ namespace Lykke.Job.BlockchainRiskControl.Domain.RiskConstraints
 
         public MaxFrequencyPerUserRiskConstraint(
             IStatisticsRepository statisticsRepository,
-            TimeSpan period, 
+            TimeSpan period,
             int maxOperationsCount)
         {
             _statisticsRepository = statisticsRepository ?? throw new ArgumentNullException(nameof(statisticsRepository));
@@ -33,12 +33,21 @@ namespace Lykke.Job.BlockchainRiskControl.Domain.RiskConstraints
             _maxOperationsCount = maxOperationsCount;
         }
 
-        public async Task<RiskConstraintResolution> ApplyAsync(Operation operation)
+        public async Task<RiskConstraintResolution> ApplyAsync(
+            string blockchainType,
+            string blockchainAssetId,
+            OperationType? operationType,
+            Operation operation)
         {
-            var operationsCount = await _statisticsRepository.GetOperationsCountForTheLastPeriodAsync(_period, operation.UserId);
+            var operationsCount = await _statisticsRepository.GetOperationsCountForTheLastPeriodAsync(
+                blockchainType,
+                blockchainAssetId,
+                operationType,
+                _period,
+                operation.UserId);
 
-            return operationsCount + 1 > _maxOperationsCount 
-                ? RiskConstraintResolution.Violated($"Operations count {operationsCount} + 1 > {_maxOperationsCount} for the last {_period}") 
+            return operationsCount + 1 > _maxOperationsCount
+                ? RiskConstraintResolution.Violated($"Operations count {operationsCount} + 1 > {_maxOperationsCount} for the last {_period}")
                 : RiskConstraintResolution.Passed;
         }
     }

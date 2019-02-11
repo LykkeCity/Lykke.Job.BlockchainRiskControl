@@ -28,25 +28,31 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Unit
             }));
 
             Assert.IsType<MaxAmountRiskConstraint>(constraint);
-            Assert.False((await constraint.ApplyAsync(new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 10))).IsViolated);
-            Assert.True((await constraint.ApplyAsync(new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 11))).IsViolated);
+
+            var resolution1 = await constraint.ApplyAsync(
+                string.Empty,
+                string.Empty,
+                OperationType.Deposit,
+                new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 10));
+
+            var resolution2 = await constraint.ApplyAsync(
+                string.Empty,
+                string.Empty,
+                OperationType.Deposit,
+                new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 11));
+
+            Assert.False(resolution1.IsViolated);
+            Assert.True(resolution2.IsViolated);
         }
 
         [Fact]
         public async Task Test_that_constraint_with_dependencies_with_parameters_can_be_created()
         {
-            int a = 1;
-
-            if (Interlocked.CompareExchange(ref a, 1, 0) == 1)
-            {
-
-            }
-
             var statisticsRepositoryMock = new Mock<IStatisticsRepository>();
 
             statisticsRepositoryMock
-                .Setup(x => x.GetOperationsCountForTheLastPeriodAsync(It.IsAny<TimeSpan>()))
-                .ReturnsAsync<TimeSpan, IStatisticsRepository, long>(period => 5);
+                .Setup(x => x.GetOperationsCountForTheLastPeriodAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<OperationType?>(), It.IsAny<TimeSpan>()))
+                .ReturnsAsync<string, string, OperationType?, TimeSpan, IStatisticsRepository, long>((b, a, t, period) => 5);
 
             var services = new ServiceCollection();
 
@@ -67,21 +73,29 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Unit
                 {"maxOperationsCount", "6"}
             }));
 
-            var resolution1 = await constraint1.ApplyAsync(new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 1));
-            var resolution2 = await constraint2.ApplyAsync(new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 1));
+            var resolution1 = await constraint1.ApplyAsync(
+                string.Empty,
+                string.Empty,
+                OperationType.Deposit,
+                new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 1));
+
+            var resolution2 = await constraint2.ApplyAsync(
+                string.Empty,
+                string.Empty,
+                OperationType.Deposit,
+                new Operation(Guid.Empty, OperationType.Deposit, Guid.Empty, string.Empty, string.Empty, string.Empty, string.Empty, 1));
 
             Assert.IsType<MaxFrequencyRiskConstraint>(constraint1);
             Assert.IsType<MaxFrequencyRiskConstraint>(constraint2);
 
-            
             Assert.True(resolution1.IsViolated);
             Assert.False(resolution2.IsViolated);
 
             statisticsRepositoryMock.Verify(
-                x => x.GetOperationsCountForTheLastPeriodAsync(It.Is<TimeSpan>(v => v == TimeSpan.FromMinutes(10))),
+                x => x.GetOperationsCountForTheLastPeriodAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<OperationType?>(), It.Is<TimeSpan>(v => v == TimeSpan.FromMinutes(10))),
                 Times.Once);
             statisticsRepositoryMock.Verify(
-                x => x.GetOperationsCountForTheLastPeriodAsync(It.Is<TimeSpan>(v => v == TimeSpan.FromMinutes(15))),
+                x => x.GetOperationsCountForTheLastPeriodAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<OperationType?>(), It.Is<TimeSpan>(v => v == TimeSpan.FromMinutes(15))),
                 Times.Once);
         }
     }

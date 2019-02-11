@@ -54,14 +54,38 @@ namespace Lykke.Job.BlockchainRiskControl.DomainServices
             _constraintsByBlockchainTypeAssetAndOperationType.AddCollectionItem((blockchainType, blockchainAssetId, operationType), constraint);
         }
 
-        public IEnumerable<IRiskConstraint> GetConstraints(string blockchainType, string blockchainAssetId, OperationType operationType)
+        public IEnumerable<(string, string, OperationType?, IRiskConstraint)> GetConstraints(string blockchainType, string blockchainAssetId, OperationType operationType)
         {
-            return _globalContraints
-                .Concat(_constraintsByOperationType.GetCollectionItems(operationType))
-                .Concat(_constraintsByBlockchainType.GetCollectionItems(blockchainType))
-                .Concat(_constraintsByBlockchainTypeAndAssetId.GetCollectionItems((blockchainType, blockchainAssetId)))
-                .Concat(_constraintsByBlockchainTypeAndOperationType.GetCollectionItems((blockchainType, operationType)))
-                .Concat(_constraintsByBlockchainTypeAssetAndOperationType.GetCollectionItems((blockchainType, blockchainAssetId, operationType)));
+            var global = _globalContraints
+                .Select(rc => (default(string), default(string), default(OperationType?), rc));
+
+            var byOp =_constraintsByOperationType
+                .GetCollectionItems(operationType)
+                .Select(rc => (default(string), default(string), (OperationType?)operationType, rc));
+
+            var byBcn = _constraintsByBlockchainType
+                .GetCollectionItems(blockchainType)
+                .Select(rc => (blockchainType, default(string), default(OperationType?), rc));
+
+            var byBcnAndAsset = _constraintsByBlockchainTypeAndAssetId
+                .GetCollectionItems((blockchainType, blockchainAssetId))
+                .Select(rc => (blockchainType, blockchainAssetId, default(OperationType?), rc));
+
+            var byBcnAndOp = _constraintsByBlockchainTypeAndOperationType
+                .GetCollectionItems((blockchainType, operationType))
+                .Select(rc => (blockchainType, default(string), (OperationType?)operationType, rc));
+
+            var byBcnAndAssetAndOp = _constraintsByBlockchainTypeAssetAndOperationType
+                .GetCollectionItems((blockchainType, blockchainAssetId, operationType))
+                .Select(rc => (blockchainType, blockchainAssetId, (OperationType?)operationType, rc));
+
+            return global
+                .Concat(byOp)
+                .Concat(byBcn)
+                .Concat(byBcnAndAsset)
+                .Concat(byBcnAndOp)
+                .Concat(byBcnAndAssetAndOp)
+                .ToList();
         }
     }
 }

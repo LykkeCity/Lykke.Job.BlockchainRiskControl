@@ -41,24 +41,24 @@ namespace Lykke.Job.BlockchainRiskControl.DomainServices
             else if (g.OperationType.HasValue &&
                      !string.IsNullOrWhiteSpace(g.BlockchainType))
             {
-                _constraintsRegistry.Add(g.BlockchainType, g.OperationType.Value, constraint);
+                r.Add(g.BlockchainType, g.OperationType.Value, constraint);
             }
             else if (g.OperationType.HasValue)
             {
-                _constraintsRegistry.Add(g.OperationType.Value, constraint);
+                r.Add(g.OperationType.Value, constraint);
             }
             else if (!string.IsNullOrWhiteSpace(g.BlockchainType) &&
                      !string.IsNullOrWhiteSpace(g.BlockchainAssetId))
             {
-                _constraintsRegistry.Add(g.BlockchainType, g.BlockchainAssetId, constraint);
+                r.Add(g.BlockchainType, g.BlockchainAssetId, constraint);
             }
             else if (!string.IsNullOrWhiteSpace(g.BlockchainType))
             {
-                _constraintsRegistry.Add(g.BlockchainType, constraint);
+                r.Add(g.BlockchainType, constraint);
             }
             else
             {
-                _constraintsRegistry.Add(constraint);
+                r.Add(constraint);
             }
         }
     }
