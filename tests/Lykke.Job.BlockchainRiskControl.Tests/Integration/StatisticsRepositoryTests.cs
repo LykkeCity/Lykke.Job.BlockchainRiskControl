@@ -17,7 +17,7 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Integration
 {
     public class StatisticsRepositoryTests
     {
-        private const string SKIP = "Should not be executed by TeamCity";
+        private const string SKIP = null;//"Should not be executed by TeamCity";
         private readonly Guid _user1 = Guid.NewGuid();
         private readonly Guid _user2 = Guid.NewGuid();
         private readonly string _blockchain = "TEST";
@@ -57,6 +57,23 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Integration
             // Arrange
 
             await Arrange();
+
+            // Act
+
+            var stopwatch = Stopwatch.StartNew();
+            var amount = await _statistics.GetAggregatedAmountForTheLastPeriodAsync(_blockchain, _asset, _type, DateTime.UtcNow - _startedAt);
+            stopwatch.Stop();
+            _output.WriteLine($"{nameof(IStatisticsRepository.GetAggregatedAmountForTheLastPeriodAsync)}\t{stopwatch.Elapsed}");
+
+            // Assert
+
+            Assert.Equal(_operations.Sum(op => op.Amount), amount, 2);
+        }
+
+        [Fact(Skip = SKIP)]
+        public async Task ShouldCalculateAggregatedAmountForTheLastPeriodIfZero()
+        {
+            // Arrange
 
             // Act
 
@@ -181,6 +198,23 @@ namespace Lykke.Job.BlockchainRiskControl.Tests.Integration
             // Assert
 
             Assert.Equal(_operations.Count(o => o.Type == _type), count);
+        }
+
+        [Fact(Skip = SKIP)]
+        public async Task ShouldCalculateOperationsCountForTheLastPeriodIfZero()
+        {
+            // Arrange
+
+            // Act
+
+            var stopwatch = Stopwatch.StartNew();
+            var count = await _statistics.GetOperationsCountForTheLastPeriodAsync(_blockchain, _asset, _type, DateTime.UtcNow - _startedAt);
+            stopwatch.Stop();
+            _output.WriteLine($"{nameof(IStatisticsRepository.GetOperationsCountForTheLastPeriodAsync)}\t{stopwatch.Elapsed}");
+
+            // Assert
+
+            Assert.Equal(_operations.Count, count);
         }
 
         [Fact(Skip = SKIP)]

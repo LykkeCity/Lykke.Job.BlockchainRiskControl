@@ -87,9 +87,9 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
             var result = await BuildQuery(blockchainType, blockchainAssetId, operationType)
                 .Match(e => e.Timestamp >= DateTime.UtcNow.Subtract(period))
                 .Group(e => 1, g => new { Amount = g.Sum(e => e.Amount) })
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
-            return result.Amount;
+            return result?.Amount ?? 0m;
         }
 
         public async Task<decimal> GetAggregatedAmountForTheLastPeriodAsync(
@@ -102,9 +102,9 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
             var result = await BuildQuery(blockchainType, blockchainAssetId, operationType)
                 .Match(e => e.Timestamp >= DateTime.UtcNow.Subtract(period) && e.UserId == userId)
                 .Group(e => 1, g => new { Amount = g.Sum(e => e.Amount) })
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
-            return result.Amount;
+            return result?.Amount ?? 0m;
         }
 
         public async Task<long> GetOperationsCountForTheLastPeriodAsync(
@@ -116,9 +116,9 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
             var result = await BuildQuery(blockchainType, blockchainAssetId, operationType)
                 .Match(e => e.Timestamp >= DateTime.UtcNow.Subtract(period))
                 .Count()
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
-            return result.Count;
+            return result?.Count ?? 0;
         }
 
         public async Task<long> GetOperationsCountForTheLastPeriodAsync(
@@ -131,9 +131,9 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics
             var result = await BuildQuery(blockchainType, blockchainAssetId, operationType)
                 .Match(e => e.Timestamp >= DateTime.UtcNow.Subtract(period) && e.UserId == userId)
                 .Count()
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
-            return result.Count;
+            return result?.Count ?? 0;
         }
 
         public async Task RegisterOperationAsync(Operation operation)
