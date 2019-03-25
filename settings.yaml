@@ -14,7 +14,7 @@ BlockchainRiskControlJob:
                 - MongoDB
     Cqrs:
         RabbitConnectionString:
-            settings-key: BlockchainRiskControlJob-RabbitConnectionString
+            settings-key: RabbitSagas
             types:
                 - RabbitMq
         RetryDelay:
