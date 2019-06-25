@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Common.Log;
 using JetBrains.Annotations;
+using Lykke.Common.Log;
 using Lykke.Cqrs;
 using Lykke.Job.BlockchainRiskControl.Contract.Events;
 using Lykke.Job.BlockchainRiskControl.Domain;
@@ -14,11 +16,14 @@ namespace Lykke.Job.BlockchainRiskControl.Workflow.CommandHandlers
     {
         private readonly TimeSpan _checkingPeriod;
         private readonly IOperationValidationService _operationValidationService;
+        private readonly ILog _log;
 
         public WaitForOperationResolutionCommandsHandler(
+            ILogFactory loggerFactory,
             TimeSpan checkingPeriod,
             IOperationValidationService operationValidationService)
         {
+            _log = loggerFactory.CreateLog(this);
             _checkingPeriod = checkingPeriod;
             _operationValidationService = operationValidationService;
         }
@@ -31,6 +36,7 @@ namespace Lykke.Job.BlockchainRiskControl.Workflow.CommandHandlers
             switch (resolution)
             {
                 case OperationValidationResolution.Unconfirmed:
+                    _log.Warning("Operation requires for manual confirmation", context: command);
                     return CommandHandlingResult.Fail(_checkingPeriod);
 
                 case OperationValidationResolution.Accepted:
