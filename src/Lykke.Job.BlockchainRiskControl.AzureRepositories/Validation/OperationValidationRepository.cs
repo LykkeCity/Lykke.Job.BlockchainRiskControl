@@ -37,12 +37,8 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Validation
             var entity = new OperationValidationEntity(validation);
             await _storage.InsertOrReplaceAsync(entity);
 
-            if (validation.Risk.IsResolutionRequired)
-                await _index.InsertOrReplaceAsync(new AzureIndex(OperationValidationEntity.IndexPk(), entity.PartitionKey, entity));
-            else
-            {
+            if (validation.Resolution != OperationValidationResolution.Unconfirmed)
                 await _index.DeleteIfExistAsync(OperationValidationEntity.IndexPk(), entity.PartitionKey);
-            }
         }
 
         public async Task<IReadOnlyList<OperationValidation>> GetResolutionRequiredAsync()
