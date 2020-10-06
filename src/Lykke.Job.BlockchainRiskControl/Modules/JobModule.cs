@@ -1,4 +1,7 @@
 ﻿using Autofac;
+using Grpc.Core;
+using Grpc.Reflection;
+using Grpc.Reflection.V1Alpha;
 using JetBrains.Annotations;
 using Lykke.Job.BlockchainRiskControl.AzureRepositories.Statistics;
 using Lykke.Job.BlockchainRiskControl.AzureRepositories.Validation;
@@ -10,6 +13,7 @@ using Lykke.Job.BlockchainRiskControl.Settings;
 using Lykke.Job.BlockchainRiskControl.Settings.JobSettings;
 using Lykke.Sdk;
 using Lykke.Sdk.Health;
+using Lykke.Service.BlockchainRiskControl;
 using Lykke.SettingsReader;
 
 namespace Lykke.Job.BlockchainRiskControl.Modules
@@ -77,6 +81,30 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
             builder.RegisterType<RiskConstraintsFactory>()
                 .As<IRiskConstraintsFactory>()
                 .SingleInstance();
+
+            builder.RegisterType<BlockchainRiskControlServiceImpl>()
+                .AsSelf()
+                .SingleInstance();
+
+            builder.Register(ctx =>
+                {
+                    var reflectionServiceImpl = new ReflectionServiceImpl(
+                        BlockchainRiskControlService.Descriptor
+                    );
+                    return new Server
+                    {
+                        Services =
+                        {
+                            BlockchainRiskControlService.BindService(ctx.Resolve<BlockchainRiskControlServiceImpl>()),
+                            ServerReflection.BindService(reflectionServiceImpl)
+                        },
+                        Ports =
+                        {
+                            new ServerPort("0.0.0.0", 5005, ServerCredentials.Insecure)
+                        }
+                    };
+                }
+            ).SingleInstance();
         }
     }
 }

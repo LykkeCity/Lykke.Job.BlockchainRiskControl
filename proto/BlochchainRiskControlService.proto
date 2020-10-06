@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+package Lykke.Service.BlockchainRiskControl;
+
+service BlockchainRiskControlService {
+    rpc GetOperations (google.protobuf.Empty) returns (OperationsResponse) {}
+    rpc AcceptOperation (OperationIdRequest) returns (google.protobuf.Empty) {}
+    rpc RejectOperation (OperationIdRequest) returns (google.protobuf.Empty) {}
+}
+
+message OperationIdRequest {
+    string id = 1;
+}
+
+message OperationsResponse {
+    repeated RiskOperation operations = 1;
+}
+
+message RiskOperation {
+    string id = 1;
+    Risk risk = 2;
+}
+
+message Risk {
+    string violations = 1;
+    string level = 2;
+}
