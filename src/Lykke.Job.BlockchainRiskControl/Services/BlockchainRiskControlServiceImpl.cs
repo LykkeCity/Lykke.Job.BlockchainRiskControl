@@ -43,9 +43,7 @@ namespace Lykke.Job.BlockchainRiskControl.Services
                     Risk = new Risk
                     {
                         Violations = operation.Risk.Violations,
-                        Level = operation.Risk.Level.ToString(),
-                        IsReliable = operation.Risk.IsReliable,
-                        IsResolutionRequired = operation.Risk.IsResolutionRequired,
+                        Level = operation.Risk.Level.ToString()
                     }
                 };
 
