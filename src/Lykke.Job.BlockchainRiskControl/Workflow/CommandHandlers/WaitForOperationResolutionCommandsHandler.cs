@@ -31,7 +31,7 @@ namespace Lykke.Job.BlockchainRiskControl.Workflow.CommandHandlers
         [UsedImplicitly]
         public async Task<CommandHandlingResult> Handle(WaitForOperationResolutionCommand command, IEventPublisher publisher)
         {
-            var resolution = await _operationValidationService.WaitForResolutionAsync(command.OperationId);
+            var resolution = await _operationValidationService.GetResolutionAsync(command.OperationId);
 
             switch (resolution)
             {
@@ -40,23 +40,7 @@ namespace Lykke.Job.BlockchainRiskControl.Workflow.CommandHandlers
                     return CommandHandlingResult.Fail(_checkingPeriod);
 
                 case OperationValidationResolution.Accepted:
-                    publisher.PublishEvent
-                    (
-                        new OperationAcceptedEvent
-                        {
-                            OperationId = command.OperationId
-                        }
-                    );
-                    break;
-
                 case OperationValidationResolution.Rejected:
-                    publisher.PublishEvent
-                    (
-                        new OperationRejectedEvent
-                        {
-                            OperationId = command.OperationId
-                        }
-                    );
                     break;
 
                 default:

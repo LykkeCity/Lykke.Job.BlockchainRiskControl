@@ -24,6 +24,8 @@ namespace Lykke.Job.BlockchainRiskControl.AzureRepositories.Validation
 
         public OperationValidationResolution? Resolution { get; set; }
 
+        public static string IndexPk() => "ResolutionRequired";
+
         public OperationValidationEntity()
         {
             // default ctor for deserialization

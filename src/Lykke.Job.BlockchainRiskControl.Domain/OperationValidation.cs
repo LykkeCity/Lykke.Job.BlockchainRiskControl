@@ -13,9 +13,7 @@ namespace Lykke.Job.BlockchainRiskControl.Domain
         public OperationValidationResolution? Resolution { get; private set; }
 
         public bool IsResolved => Risk.IsResolutionRequired &&
-                                  Resolution != OperationValidationResolution.Unconfirmed &&
-                                  // We need this condition while Resolution value is updated via the storage
-                                  ResolutionMoment.HasValue;
+                                  Resolution != OperationValidationResolution.Unconfirmed;
 
         private OperationValidation(
             string version,
