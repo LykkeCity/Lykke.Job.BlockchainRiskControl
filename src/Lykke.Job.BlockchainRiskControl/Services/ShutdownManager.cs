@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Common;
 using Common.Log;
+using Grpc.Core;
 using Lykke.Common.Log;
 using Lykke.Sdk;
 
@@ -12,11 +13,13 @@ namespace Lykke.Job.BlockchainRiskControl.Services
     {
         private readonly ILog _log;
         private readonly IEnumerable<IStopable> _items;
+        private readonly Server _grpcServer;
 
-        public ShutdownManager(ILogFactory logFactory, IEnumerable<IStopable> items)
+        public ShutdownManager(ILogFactory logFactory, IEnumerable<IStopable> items, Server grpcServer)
         {
             _log = logFactory.CreateLog(this);
             _items = items;
+            _grpcServer = grpcServer;
         }
 
         public async Task StopAsync()
@@ -33,7 +36,7 @@ namespace Lykke.Job.BlockchainRiskControl.Services
                 }
             }
 
-            await Task.CompletedTask;
+            await _grpcServer.ShutdownAsync();
         }
     }
 }
