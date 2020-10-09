@@ -5,7 +5,7 @@ import "google/protobuf/empty.proto";
 package Lykke.Service.BlockchainRiskControl;
 
 service BlockchainRiskControlService {
-    rpc GetOperations (google.protobuf.Empty) returns (OperationsResponse) {}
+    rpc GetOperationsToResolve (google.protobuf.Empty) returns (OperationsResponse) {}
     rpc AcceptOperation (OperationIdRequest) returns (google.protobuf.Empty) {}
     rpc RejectOperation (OperationIdRequest) returns (google.protobuf.Empty) {}
 }
