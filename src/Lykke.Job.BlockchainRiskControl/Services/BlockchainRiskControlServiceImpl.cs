@@ -30,7 +30,7 @@ namespace Lykke.Job.BlockchainRiskControl.Services
             _cqrsEngine = cqrsEngine;
         }
 
-        public override async Task<OperationsResponse> GetOperations(Empty request, ServerCallContext context)
+        public override async Task<OperationsResponse> GetOperationsToResolve(Empty request, ServerCallContext context)
         {
             var operations = await _validationRepository.GetResolutionRequiredAsync();
             var result = new OperationsResponse();
