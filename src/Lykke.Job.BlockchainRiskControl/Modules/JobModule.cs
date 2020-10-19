@@ -108,7 +108,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
             ).SingleInstance();
 
             builder.RegisterInstance(
-                new TelegramBotClient(_settings.CurrentValue.Telegram?.Token ?? "1234:test")
+                new TelegramBotClient(string.IsNullOrEmpty(_settings.CurrentValue.Telegram?.Token) ? "1234:test" : _settings.CurrentValue.Telegram?.Token)
             ).As<ITelegramBotClient>().SingleInstance();
         }
     }
