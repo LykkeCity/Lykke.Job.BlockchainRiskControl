@@ -14,6 +14,9 @@
     <None Update="Dockerfile">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Lykke.Cqrs" Version="8.1.0" />
@@ -30,14 +33,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
+    <PackageReference Include="Telegram.Bot" Version="15.6.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\contract\Lykke.Job.BlockchainRiskControl.Contract\Lykke.Job.BlockchainRiskControl.Contract.csproj" />
     <ProjectReference Include="..\Lykke.Job.BlockchainRiskControl.AzureRepositories\Lykke.Job.BlockchainRiskControl.AzureRepositories.csproj" />
     <ProjectReference Include="..\Lykke.Job.BlockchainRiskControl.Domain\Lykke.Job.BlockchainRiskControl.Domain.csproj" />
     <ProjectReference Include="..\Lykke.Job.BlockchainRiskControl.DomainServices\Lykke.Job.BlockchainRiskControl.DomainServices.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controllers" />
   </ItemGroup>
 </Project>
