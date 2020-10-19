@@ -24,10 +24,12 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
     public class CqrsModule : Module
     {
         private readonly CqrsSettings _settings;
+        private readonly IReloadingManager<AppSettings> _appSettings;
 
         public CqrsModule(IReloadingManager<AppSettings> settings)
         {
             _settings = settings.CurrentValue.BlockchainRiskControlJob.Cqrs;
+            _appSettings = settings;
         }
 
         protected override void Load(ContainerBuilder builder)
@@ -83,7 +85,8 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
         private void RegisterMessageHandlers(ContainerBuilder builder)
         {
             // Sagas
-            builder.RegisterType<OperationValidationSaga>();
+            builder.RegisterType<OperationValidationSaga>()
+                .WithParameter(TypedParameter.From(_appSettings.CurrentValue.BlockchainRiskControlJob.Telegram?.ChatId));
 
             // Command handlers
             builder.RegisterType<ValidateOperationCommandsHandler>();
@@ -91,7 +94,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
                 .WithParameter(TypedParameter.From(_settings.WaitForOperationResolutionRetryDelay));
             builder.RegisterType<RegisterOperationStatisticsCommandsHandler>();
         }
-        
+
         private CqrsEngine CreateEngine(IComponentContext ctx)
         {
             var logFactory = ctx.Resolve<ILogFactory>();
@@ -163,7 +166,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
                 new DefaultEndpointProvider(),
                 true,
                 registration.ToArray());
-            
+
             return cqrsEngine;
         }
     }

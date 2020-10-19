@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using JetBrains.Annotations;
+using Lykke.SettingsReader.Attributes;
 
 namespace Lykke.Job.BlockchainRiskControl.Settings.JobSettings
 {
@@ -14,5 +15,8 @@ namespace Lykke.Job.BlockchainRiskControl.Settings.JobSettings
 
         [UsedImplicitly(ImplicitUseKindFlags.Assign)]
         public IList<RiskConstraintsGroupSettings> ConstraintsGroups { get; set; }
+
+        [Optional]
+        public TelegramSettings Telegram { get; set; }
     }
 }
