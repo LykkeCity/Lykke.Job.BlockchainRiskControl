@@ -25,6 +25,13 @@ BlockchainRiskControlJob:
         settings-key: BlockchainRiskControlJob-ConstraintsGroups
         types:
             - JsonArray
+    Telegram:
+        Token:
+            settings-key: BlockchainRiskControlJob-Telegram-Token
+            types: [Optional]
+        ChatId:
+            settings-key: BlockchainRiskControlJob-Telegram-ChatId
+            types: [Optional]
 SlackNotifications:
     AzureQueue:
         ConnectionString:
