@@ -28,9 +28,10 @@ BlockchainRiskControlJob:
     Telegram:
         Token:
             settings-key: BlockchainRiskControlJob-Telegram-Token
+            types: [Optional]
         ChatId:
             settings-key: BlockchainRiskControlJob-Telegram-ChatId
-    types: [Optional]
+            types: [Optional]
 SlackNotifications:
     AzureQueue:
         ConnectionString:
