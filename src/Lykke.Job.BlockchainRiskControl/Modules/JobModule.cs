@@ -15,7 +15,6 @@ using Lykke.Sdk;
 using Lykke.Sdk.Health;
 using Lykke.Service.BlockchainRiskControl;
 using Lykke.SettingsReader;
-using Moq;
 using Telegram.Bot;
 
 namespace Lykke.Job.BlockchainRiskControl.Modules
@@ -109,9 +108,7 @@ namespace Lykke.Job.BlockchainRiskControl.Modules
             ).SingleInstance();
 
             builder.RegisterInstance(
-                _settings.CurrentValue.Telegram == null
-                    ? new Mock<ITelegramBotClient>().Object
-                    : new TelegramBotClient(_settings.CurrentValue.Telegram.Token)
+                new TelegramBotClient(_settings.CurrentValue.Telegram?.Token ?? "1234:test")
             ).As<ITelegramBotClient>().SingleInstance();
         }
     }
