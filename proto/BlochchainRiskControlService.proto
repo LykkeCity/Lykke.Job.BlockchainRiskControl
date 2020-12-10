@@ -21,6 +21,13 @@ message OperationsResponse {
 message RiskOperation {
     string id = 1;
     Risk risk = 2;
+    string clientId = 3;
+    string type = 4;
+    string blockchainType = 5;
+    string assetId = 6;
+    string fromAddress = 7;
+    string toAddress = 8;
+    string amount = 9;
 }
 
 message Risk {
