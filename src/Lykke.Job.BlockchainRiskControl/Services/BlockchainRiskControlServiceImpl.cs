@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Threading.Tasks;
 using Common.Log;
 using Google.Protobuf.WellKnownTypes;
@@ -40,6 +41,13 @@ namespace Lykke.Job.BlockchainRiskControl.Services
                 var riskOperation = new RiskOperation
                 {
                     Id = operation.Operation.Id.ToString(),
+                    ClientId = operation.Operation.UserId.ToString(),
+                    Type = operation.Operation.Type.ToString(),
+                    BlockchainType = operation.Operation.BlockchainType,
+                    AssetId = operation.Operation.BlockchainAssetId,
+                    FromAddress = operation.Operation.FromAddress,
+                    ToAddress = operation.Operation.ToAddress,
+                    Amount = operation.Operation.Amount.ToString(CultureInfo.InvariantCulture),
                     Risk = new Risk
                     {
                         Violations = operation.Risk.Violations,
